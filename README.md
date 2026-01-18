@@ -9,5 +9,5 @@ npm install
 To run:
 
 ```bash
-npm run index.ts
+npm run dev
 ```
