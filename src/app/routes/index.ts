@@ -1,24 +1,26 @@
-import express, { Application } from "express";
+import express, { IRouter } from "express";
+import { userRouter } from "../module/user/user.routes";
+import { authRouter } from "../module/auth/auth.routes";
 
 const router = express.Router();
 
 interface IModuleRoutes {
   path: string;
-  route: Application;
+  route: IRouter;
 }
 
 const moduleRoutes: IModuleRoutes[] = [
-  // {
-  //     path: '/user',
-  //     route: userRoutes
-  // },
+  {
+    path: "/user",
+    route: userRouter,
+  },
+  {
+    path: "/auth",
+    route: authRouter,
+  },
   // {
   //     path: '/admin',
   //     route: AdminRoutes
-  // },
-  // {
-  //     path: '/auth',
-  //     route: AuthRoutes
   // },
   // {
   //     path: '/specialties',
