@@ -29,6 +29,60 @@ const createPatient = async (payload: Request) => {
   return result;
 };
 
+const createDoctor = async (payload: Request) => {
+  if (payload.file) {
+    const uploadImage = await fileUploader.uploadImageToCloudinary(
+      payload.file
+    );
+    payload.body.doctor.profilePhoto = uploadImage?.secure_url as string;
+  }
+
+  const hashedPassword = await hashPassword(payload.body.password);
+
+  const result = await prisma.$transaction(async (tnx) => {
+    await tnx.user.create({
+      data: {
+        email: payload.body.doctor.email,
+        password: hashedPassword,
+      },
+    });
+
+    return await tnx.doctor.create({
+      data: payload.body.doctor,
+    });
+  });
+
+  return result;
+};
+
+const createAdmin = async (payload: Request) => {
+  if (payload.file) {
+    const uploadImage = await fileUploader.uploadImageToCloudinary(
+      payload.file
+    );
+    payload.body.admin.profilePhoto = uploadImage?.secure_url as string;
+  }
+
+  const hashedPassword = await hashPassword(payload.body.password);
+
+  const result = await prisma.$transaction(async (tnx) => {
+    await tnx.user.create({
+      data: {
+        email: payload.body.admin.email,
+        password: hashedPassword,
+      },
+    });
+
+    return await tnx.admin.create({
+      data: payload.body.admin,
+    });
+  });
+
+  return result;
+};
+
 export const userServices = {
   createPatient,
+  createDoctor,
+  createAdmin,
 };
