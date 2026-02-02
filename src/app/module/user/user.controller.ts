@@ -36,8 +36,20 @@ const createAdmin = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getAllUser = catchAsync(async (req: Request, res: Response) => {
+  const result = await userServices.getAllUser(req);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "User created successfully.",
+    data: result,
+  });
+});
+
 export const userControllers = {
   createPatient,
   createDoctor,
   createAdmin,
+  getAllUser,
 };

@@ -2,6 +2,9 @@ import { Request } from "express";
 import { fileUploader } from "../../helpers/fileUploader";
 import { hashPassword } from "../../utils/passwordSecurity";
 import { prisma } from "../../utils/prisma";
+import { PrismaQueryBuilder } from "../../utils/queryBuilder";
+import { Prisma } from "../../../../prisma/generated/prisma/client";
+import { userSearchableFields } from "./user.constants";
 
 const createPatient = async (payload: Request) => {
   if (payload.file) {
@@ -81,8 +84,30 @@ const createAdmin = async (payload: Request) => {
   return result;
 };
 
+const getAllUser = async (payload: Request) => {
+  const qb = new PrismaQueryBuilder<
+    Prisma.UserWhereInput,
+    Prisma.UserSelect,
+    Prisma.UserOrderByWithRelationInput
+  >(payload.query as Record<string, string>)
+    .filter()
+    .search(userSearchableFields)
+    .paginate()
+    .fields()
+    .sort();
+
+  const result = prisma.user.findMany(qb.build());
+
+  const [data, meta] = await Promise.all([result, qb.getMeta(prisma.user)]);
+  return {
+    data,
+    meta,
+  };
+};
+
 export const userServices = {
   createPatient,
   createDoctor,
   createAdmin,
+  getAllUser,
 };
