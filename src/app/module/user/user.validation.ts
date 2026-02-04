@@ -29,10 +29,10 @@ const createDoctorValidationSchema = z.object({
 
 const createAdminValidationSchema = z.object({
   password: z.string(),
-  doctor: z.object({
+  admin: z.object({
     name: z.string(),
     email: z.email(),
-    address: z.string().optional(),
+    contactNumber: z.string(),
   }),
 });
 

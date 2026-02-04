@@ -3,8 +3,10 @@ import { fileUploader } from "../../helpers/fileUploader";
 import { hashPassword } from "../../utils/passwordSecurity";
 import { prisma } from "../../utils/prisma";
 import { PrismaQueryBuilder } from "../../utils/queryBuilder";
-import { Prisma } from "../../../../prisma/generated/prisma/client";
+import { Prisma, UserRole } from "../../../../prisma/generated/prisma/client";
 import { userSearchableFields } from "./user.constants";
+import { omit } from "zod/v4/core/util.cjs";
+import { password } from "bun";
 
 const createPatient = async (payload: Request) => {
   if (payload.file) {
@@ -47,6 +49,7 @@ const createDoctor = async (payload: Request) => {
       data: {
         email: payload.body.doctor.email,
         password: hashedPassword,
+        role: UserRole.DOCTOR,
       },
     });
 
@@ -73,6 +76,7 @@ const createAdmin = async (payload: Request) => {
       data: {
         email: payload.body.admin.email,
         password: hashedPassword,
+        role: UserRole.ADMIN,
       },
     });
 
@@ -87,16 +91,23 @@ const createAdmin = async (payload: Request) => {
 const getAllUser = async (payload: Request) => {
   const qb = new PrismaQueryBuilder<
     Prisma.UserWhereInput,
-    Prisma.UserSelect,
     Prisma.UserOrderByWithRelationInput
   >(payload.query as Record<string, string>)
     .filter()
     .search(userSearchableFields)
     .paginate()
-    .fields()
     .sort();
 
-  const result = prisma.user.findMany(qb.build());
+  console.log(qb);
+
+  const result = prisma.user.findMany({
+    ...qb.build(),
+    include: {
+      admin: true,
+      patient: true,
+      doctor: true,
+    },
+  });
 
   const [data, meta] = await Promise.all([result, qb.getMeta(prisma.user)]);
   return {

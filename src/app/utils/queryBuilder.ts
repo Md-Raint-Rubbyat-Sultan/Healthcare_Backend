@@ -1,8 +1,8 @@
 import { excludedField } from "../constants/constants";
 
-export class PrismaQueryBuilder<TWhere, TSelect, TOrderBy> {
+export class PrismaQueryBuilder<TWhere, TOrderBy> {
   public where: TWhere | any = {};
-  public select?: TSelect;
+  // public select?: TSelect;
   public orderBy?: TOrderBy;
   public skip?: number;
   public take?: number;
@@ -81,16 +81,16 @@ export class PrismaQueryBuilder<TWhere, TSelect, TOrderBy> {
     return this;
   }
 
-  fields(): this {
-    if (!this.query.fields) return this;
+  // fields(): this {
+  //   if (!this.query.fields) return this;
 
-    this.select = this.query.fields.split(",").reduce((acc: any, field) => {
-      acc[field] = true;
-      return acc;
-    }, {});
+  //   this.select = this.query.fields.split(",").reduce((acc: any, field) => {
+  //     acc[field] = true;
+  //     return acc;
+  //   }, {});
 
-    return this;
-  }
+  //   return this;
+  // }
 
   paginate(): this {
     const page = Number(this.query?.page) || 1;
@@ -121,7 +121,7 @@ export class PrismaQueryBuilder<TWhere, TSelect, TOrderBy> {
   build() {
     return {
       where: this.where,
-      select: this.select,
+      // select: this.select,
       orderBy: this.orderBy,
       skip: this.skip,
       take: this.take,

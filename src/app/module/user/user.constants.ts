@@ -6,7 +6,6 @@ export const userSearchableFields: string[] = [
   "doctor.currentWorkingPlace",
   "doctor.designation",
   "patient.name",
-  "patient.contactNumber",
   "admin.name",
   "admin.contactNumber",
 ];
