@@ -79,7 +79,9 @@ const scheduleForDoctor = async (user: JwtPayload, payload: Request) => {
 
   const doctorSchedules = await prisma.doctorSchedules.findMany({
     where: {
-      doctorId: user.userId,
+      doctor: {
+        email: user.email,
+      },
     },
     select: {
       scheduleId: true,

@@ -7,7 +7,7 @@ const insertIntoDb = async (
 ) => {
   const doctorData = await prisma.doctor.findUniqueOrThrow({
     where: {
-      id: user.userId,
+      email: user.email,
     },
     select: {
       id: true,
