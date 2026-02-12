@@ -15,14 +15,14 @@ app.use(express.json());
 app.use(
   express.urlencoded({
     extended: true,
-  })
+  }),
 );
 
 app.use(
   cors({
-    origin: [],
+    origin: [envVars.DEV_URL],
     credentials: true,
-  })
+  }),
 );
 
 app.use("/api/v1", router);

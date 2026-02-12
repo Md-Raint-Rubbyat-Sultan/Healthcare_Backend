@@ -13,7 +13,7 @@ const catchAuth = (...authRoles: UserRole[]) =>
 
     const tokenInfo = verifyToken(
       token,
-      envVars.JWT.ACCESS_TOKEN_SECRET
+      envVars.JWT.ACCESS_TOKEN_SECRET,
     ) as JwtPayload;
 
     const isUserExist = await prisma.user.findUnique({
@@ -29,7 +29,7 @@ const catchAuth = (...authRoles: UserRole[]) =>
     if (isUserExist.status === "INACTIVE") {
       throw new ApiError(
         403,
-        `User is ${isUserExist.status}! You are unauthorized to access now.`
+        `User is ${isUserExist.status}! You are unauthorized to access now.`,
       );
     }
 
@@ -40,7 +40,7 @@ const catchAuth = (...authRoles: UserRole[]) =>
     if (!authRoles.includes(isUserExist.role)) {
       throw new ApiError(
         403,
-        `User ${isUserExist.role} is unauthorized to access this route!`
+        `${isUserExist.role} is unauthorized to access this route!`,
       );
     }
 

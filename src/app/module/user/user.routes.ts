@@ -14,7 +14,7 @@ router.post(
   "/create-patient",
   fileUploader.upload.single("file"),
   validateRequest(userValidation.createPatientValidationSchema),
-  userControllers.createPatient
+  userControllers.createPatient,
 );
 
 router.post(
@@ -22,7 +22,7 @@ router.post(
   catchAuth(UserRole.ADMIN),
   fileUploader.upload.single("file"),
   validateRequest(userValidation.createDoctorValidationSchema),
-  userControllers.createDoctor
+  userControllers.createDoctor,
 );
 
 router.post(
@@ -30,7 +30,7 @@ router.post(
   catchAuth(UserRole.ADMIN),
   fileUploader.upload.single("file"),
   validateRequest(userValidation.createAdminValidationSchema),
-  userControllers.createAdmin
+  userControllers.createAdmin,
 );
 
 export const userRouter = router;

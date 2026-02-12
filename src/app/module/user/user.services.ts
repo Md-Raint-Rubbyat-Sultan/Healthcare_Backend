@@ -5,13 +5,11 @@ import { prisma } from "../../utils/prisma";
 import { PrismaQueryBuilder } from "../../utils/queryBuilder";
 import { Prisma, UserRole } from "../../../../prisma/generated/prisma/client";
 import { userSearchableFields } from "./user.constants";
-import { omit } from "zod/v4/core/util.cjs";
-import { password } from "bun";
 
 const createPatient = async (payload: Request) => {
   if (payload.file) {
     const uploadImage = await fileUploader.uploadImageToCloudinary(
-      payload.file
+      payload.file,
     );
     payload.body.patient.profilePhoto = uploadImage?.secure_url as string;
   }
@@ -37,7 +35,7 @@ const createPatient = async (payload: Request) => {
 const createDoctor = async (payload: Request) => {
   if (payload.file) {
     const uploadImage = await fileUploader.uploadImageToCloudinary(
-      payload.file
+      payload.file,
     );
     payload.body.doctor.profilePhoto = uploadImage?.secure_url as string;
   }
@@ -64,7 +62,7 @@ const createDoctor = async (payload: Request) => {
 const createAdmin = async (payload: Request) => {
   if (payload.file) {
     const uploadImage = await fileUploader.uploadImageToCloudinary(
-      payload.file
+      payload.file,
     );
     payload.body.admin.profilePhoto = uploadImage?.secure_url as string;
   }
@@ -98,14 +96,15 @@ const getAllUser = async (payload: Request) => {
     .paginate()
     .sort();
 
-  console.log(qb);
-
   const result = prisma.user.findMany({
     ...qb.build(),
     include: {
       admin: true,
       patient: true,
       doctor: true,
+    },
+    omit: {
+      password: true,
     },
   });
 

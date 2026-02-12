@@ -6,6 +6,7 @@ const createPatientValidationSchema = z.object({
   patient: z.object({
     name: z.string(),
     email: z.email(),
+    contactNumber: z.string(),
     address: z.string().optional(),
   }),
 });

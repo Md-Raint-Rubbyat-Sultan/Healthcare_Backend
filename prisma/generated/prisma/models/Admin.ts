@@ -224,17 +224,17 @@ export type AdminOrderByWithRelationInput = {
 export type AdminWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   email?: string
+  contactNumber?: string
   AND?: Prisma.AdminWhereInput | Prisma.AdminWhereInput[]
   OR?: Prisma.AdminWhereInput[]
   NOT?: Prisma.AdminWhereInput | Prisma.AdminWhereInput[]
   name?: Prisma.StringFilter<"Admin"> | string
   profilePhoto?: Prisma.StringNullableFilter<"Admin"> | string | null
-  contactNumber?: Prisma.StringFilter<"Admin"> | string
   isDeleted?: Prisma.BoolFilter<"Admin"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Admin"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Admin"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-}, "id" | "email">
+}, "id" | "email" | "contactNumber">
 
 export type AdminOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
