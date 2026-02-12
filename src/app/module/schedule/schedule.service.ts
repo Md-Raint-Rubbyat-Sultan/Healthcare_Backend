@@ -4,6 +4,7 @@ import { prisma } from "../../utils/prisma";
 import { Request } from "express";
 import { PrismaQueryBuilder } from "../../utils/queryBuilder";
 import { Prisma } from "../../../../prisma/generated/prisma/client";
+import { JwtPayload } from "jsonwebtoken";
 
 const insertIntoDb = async (paylod: any) => {
   const { startTime, endTime, startDate, endDate, interval } = paylod;
@@ -53,7 +54,7 @@ const insertIntoDb = async (paylod: any) => {
   return schedules;
 };
 
-const scheduleForDoctor = async (payload: Request) => {
+const scheduleForDoctor = async (user: JwtPayload, payload: Request) => {
   const qb = new PrismaQueryBuilder<
     Prisma.ScheduleWhereInput,
     Prisma.ScheduleOrderByWithRelationInput
@@ -76,16 +77,35 @@ const scheduleForDoctor = async (payload: Request) => {
     ],
   };
 
+  const doctorSchedules = await prisma.doctorSchedules.findMany({
+    where: {
+      doctorId: user.userId,
+    },
+    select: {
+      scheduleId: true,
+    },
+  });
+
+  const doctorScheduleIds = doctorSchedules.map(
+    (schedule) => schedule.scheduleId,
+  );
+
   const result = prisma.schedule.findMany({
     ...qb.build(),
     where: {
       ...rangeWhere,
+      id: {
+        notIn: doctorScheduleIds,
+      },
     },
   });
 
   const total = await prisma.schedule.count({
     where: {
       ...rangeWhere,
+      id: {
+        notIn: doctorScheduleIds,
+      },
     },
   });
 
@@ -106,7 +126,18 @@ const scheduleForDoctor = async (payload: Request) => {
   };
 };
 
+const deleteSchedule = async (id: string) => {
+  const result = await prisma.schedule.delete({
+    where: {
+      id,
+    },
+  });
+
+  return result;
+};
+
 export const scheduleService = {
   insertIntoDb,
   scheduleForDoctor,
+  deleteSchedule,
 };

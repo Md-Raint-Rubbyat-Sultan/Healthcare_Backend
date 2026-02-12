@@ -1,6 +1,7 @@
+import { v2 as cloudinary } from "cloudinary";
+import fs from "fs/promises";
 import multer from "multer";
 import path from "path";
-import { v2 as cloudinary } from "cloudinary";
 import { envVars } from "../config/env";
 
 const storage = multer.diskStorage({
@@ -22,14 +23,25 @@ const uploadImageToCloudinary = async (file: Express.Multer.File) => {
     api_secret: envVars.CLOUDINARY.API_SECRET,
   });
 
-  // Upload an image
-  return await cloudinary.uploader
-    .upload(file.path, {
+  try {
+    const result = await cloudinary.uploader.upload(file.path, {
       public_id: file.filename,
-    })
-    .catch((error) => {
-      console.log(error);
     });
+
+    // ✅ Remove file after successful upload
+    await fs.unlink(file.path);
+
+    return result;
+  } catch (error) {
+    console.log("Cloudinary upload error:", error);
+
+    // Optional: remove file even if upload fails
+    try {
+      await fs.unlink(file.path);
+    } catch (err) {
+      console.log("File delete error:", err);
+    }
+  }
 };
 
 export const fileUploader = {

@@ -11,7 +11,8 @@ const createPatient = async (payload: Request) => {
     const uploadImage = await fileUploader.uploadImageToCloudinary(
       payload.file,
     );
-    payload.body.patient.profilePhoto = uploadImage?.secure_url as string;
+    payload.body.patient.profilePhoto =
+      (uploadImage?.secure_url as string) || null;
   }
 
   const hashedPassword = await hashPassword(payload.body.password);

@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.get(
   "/select-schedule",
-  catchAuth(UserRole.DOCTOR),
+  catchAuth(UserRole.DOCTOR, UserRole.ADMIN),
   scheduleController.scheduleForDoctor,
 );
 
@@ -18,6 +18,12 @@ router.post(
   catchAuth(UserRole.ADMIN),
   validateRequest(scheduleValidation),
   scheduleController.insertIntoDb,
+);
+
+router.delete(
+  "/delete-schedule/:id",
+  catchAuth(UserRole.ADMIN),
+  scheduleController.deleteSchedule,
 );
 
 export const scheduleRoute = router;
