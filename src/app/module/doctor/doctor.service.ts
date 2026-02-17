@@ -73,15 +73,22 @@ const updateIntoDB = async (
   payload: Partial<IDoctorUpdateInput>,
   user: JwtPayload,
 ) => {
-  if (user.userId !== id) {
-    throw new ApiError(403, "You are forbbiden to update this user.");
-  }
-
   const doctorInfo = await prisma.doctor.findUniqueOrThrow({
     where: {
       id,
     },
+    include: {
+      user: {
+        select: {
+          id: true,
+        },
+      },
+    },
   });
+
+  if (doctorInfo.user.id !== user.userId) {
+    throw new ApiError(403, "You are forbbiden to update this user.");
+  }
 
   const { specialties, ...doctorData } = payload;
 

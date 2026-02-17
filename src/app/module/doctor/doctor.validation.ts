@@ -17,7 +17,7 @@ export const doctorUpdateZodValidation = z.object({
     .array(
       z.object({
         specialtyId: z.string(),
-        isDeleted: z.boolean().optional(),
+        isDeleted: z.boolean().default(false),
       }),
     )
     .optional(),
