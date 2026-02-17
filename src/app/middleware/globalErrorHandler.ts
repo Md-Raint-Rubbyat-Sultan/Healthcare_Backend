@@ -5,19 +5,20 @@ export const globalErrorHandler = (
   error: any,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   if (envVars.NODE_ENV === "development") {
     console.log(error);
   }
 
-  let statusCode = 500;
+  let err = error;
+  let statusCode = err.statusCode || 500;
   let success = false;
-  let message = error.message || "Somthing went wrong!";
+  let message = err.message || "Somthing went wrong!";
 
   res.status(statusCode).json({
     success,
     message,
-    error,
+    err,
   });
 };

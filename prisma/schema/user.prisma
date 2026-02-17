@@ -48,7 +48,8 @@ model Doctor {
     createdAt           DateTime @default(now())
     updatedAt           DateTime @updatedAt
 
-    doctorSchedules DoctorSchedules[]
+    doctorSchedules   DoctorSchedules[]
+    doctorSpecialties DoctorSpecialties[]
 
     user User @relation(fields: [email], references: [email])
 
@@ -59,7 +60,7 @@ model Patient {
     id            String   @id @default(uuid())
     email         String   @unique
     name          String
-    contactNumber String  @unique
+    contactNumber String   @unique
     profilePhoto  String?
     address       String?
     isDeleted     Boolean  @default(false)

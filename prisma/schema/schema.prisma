@@ -1,8 +1,16 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider        = "prisma-client"
+  previewFeatures = ["typedSql"]
+  output          = "../generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+model deleted_user {
+  email String   @id @unique
+  role  UserRole
+
+  @@map("deleted_users")
 }

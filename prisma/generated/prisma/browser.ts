@@ -28,6 +28,21 @@ export type Schedule = Prisma.ScheduleModel
  */
 export type DoctorSchedules = Prisma.DoctorSchedulesModel
 /**
+ * Model deleted_user
+ * 
+ */
+export type deleted_user = Prisma.deleted_userModel
+/**
+ * Model Specialties
+ * 
+ */
+export type Specialties = Prisma.SpecialtiesModel
+/**
+ * Model DoctorSpecialties
+ * 
+ */
+export type DoctorSpecialties = Prisma.DoctorSpecialtiesModel
+/**
  * Model User
  * 
  */
